@@ -51,6 +51,8 @@ body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .all{display:inline-flex;align-items:center;gap:6px;font:600 15px/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;padding:10px 4px;background:none;border:0;cursor:pointer}
 .all span{transition:transform .3s var(--ease)}
 .all:hover span{transform:translateY(3px)}
+.all[aria-expanded="true"] span{transform:rotate(180deg)}
+.sec-toggle{margin-top:14px;padding:10px 0}
 
 
 /* piacsáv */
@@ -193,7 +195,7 @@ body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .feat:hover .btn .arr{transform:translateX(3px)}
 
 /* további hírek */
-.more{margin-top:48px;display:grid;grid-template-columns:240px 1fr;gap:24px 40px;animation:rise .9s var(--ease) backwards;animation-delay:550ms}
+.more{scroll-margin-top:24px;margin-top:48px;display:grid;grid-template-columns:240px 1fr;gap:24px 40px;animation:rise .9s var(--ease) backwards;animation-delay:550ms}
 .more h3{font-family:var(--serif);font-weight:500;font-size:28px;letter-spacing:-.015em;line-height:1.1}
 .stamp{margin-top:10px;font-size:13px;line-height:1.55;color:var(--muted);font-variant-numeric:tabular-nums}
 .list{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
@@ -870,6 +872,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
   function App(){
     var st = useState("Összes"), f = st[0], setF = st[1];
     var mo = useState(false), more = mo[0], setMore = mo[1];
+    function toggleMore(){
+      if (more) { setMore(false); return; }
+      var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var sec = document.getElementById("tovabbi");
+      if (sec) sec.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+      setTimeout(function(){ setMore(true); }, calm ? 0 : 420);
+    }
     var list = (f === "Összes" ? ITEMS : ITEMS.filter(function(a){ return a.category === f; })).map(function(a, i){ return Object.assign({}, a, { _v: i }); });
     var feat = list[0], smalls = list.slice(1, 4), rest = list.slice(4);
     var credits = list.filter(function(a){ return a.image && a.credit; });
@@ -885,7 +894,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
               return html`<button key=${x} id=${"f-" + x} type="button" class="pill" aria-pressed=${f === x ? "true" : "false"} onClick=${function(){ setF(x); }}>${x}</button>`;
             })}
           </div>
-          <button type="button" class="all" aria-expanded=${more ? "true" : "false"} aria-controls="more-list" onClick=${function(){ setMore(!more); }}>${more ? "Bezárás" : "További hírek"} <span aria-hidden="true">${more ? "↑" : "↓"}</span></button>
+          <button type="button" class="all" aria-expanded=${more ? "true" : "false"} aria-controls="more-list" onClick=${toggleMore}>További hírek <span aria-hidden="true">↓</span></button>
           <${ThemeToggle} />
         </div>
       </header>
@@ -902,6 +911,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
         <div>
           <h3 id="more-h">${f === "Összes" ? "További hírek" : "További: " + f}</h3>
           <p class="stamp">${data.edition === "esti" ? "Esti" : "Reggeli"} kiadás · frissítve ${short(data.updated.slice(0,10))} ${hhmm}<br />Következő frissítés: ${next}</p>
+          ${rest.length > 0 && html`<button type="button" class="all sec-toggle" aria-expanded=${more ? "true" : "false"} aria-controls="more-list" onClick=${toggleMore}>${more ? "Elrejtés" : "Mutasd mind (" + rest.length + ")"} <span aria-hidden="true">↓</span></button>`}
           <${Elections} />
         </div>
         <div class=${"drop" + (more ? " open" : "")} id="more-list">
