@@ -48,7 +48,7 @@ body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .theme{flex:none;display:inline-grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);cursor:pointer;transition:border-color .3s var(--ease),background .3s var(--ease)}
 .theme:hover{border-color:var(--ink)}
 .theme svg{width:18px;height:18px;display:block}
-.all{display:inline-flex;align-items:center;gap:6px;font:600 15px/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;padding:10px 4px}
+.all{display:inline-flex;align-items:center;gap:6px;font:600 15px/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;padding:10px 4px;background:none;border:0;cursor:pointer}
 .all span{transition:transform .3s var(--ease)}
 .all:hover span{transform:translateY(3px)}
 
@@ -209,6 +209,10 @@ body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .row:hover .t .u{background-size:100% 1px}
 .row .src{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .note{margin-top:18px;font-size:13px;color:var(--muted)}
+.drop{display:grid;grid-template-rows:0fr;align-self:start;transition:grid-template-rows .6s var(--ease)}
+.drop.open{grid-template-rows:1fr}
+.drop-in{min-height:0;overflow:hidden}
+.drop.open .row{animation:rise .6s var(--ease) backwards;animation-delay:calc(var(--i,0) * 70ms)}
 
 a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
 .title a:focus-visible{outline:none}
@@ -853,7 +857,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
   }
   function Row(p){
     var a = p.a;
-    return html`<li class="row">
+    return html`<li class="row" style=${{ "--i": p.i }}>
       <${Media} a=${a} cls="thumb" noCredit=${true} />
       <div class="rb">
         <div class="rmeta"><${Tag} c=${a.category} /><span class="rsrc"><${Avatar} a=${a} sm=${true} /><span>${a.source} · ${short(a.date)}</span></span></div>
@@ -865,6 +869,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
 
   function App(){
     var st = useState("Összes"), f = st[0], setF = st[1];
+    var mo = useState(false), more = mo[0], setMore = mo[1];
     var list = (f === "Összes" ? ITEMS : ITEMS.filter(function(a){ return a.category === f; })).map(function(a, i){ return Object.assign({}, a, { _v: i }); });
     var feat = list[0], smalls = list.slice(1, 4), rest = list.slice(4);
     var credits = list.filter(function(a){ return a.image && a.credit; });
@@ -880,7 +885,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
               return html`<button key=${x} id=${"f-" + x} type="button" class="pill" aria-pressed=${f === x ? "true" : "false"} onClick=${function(){ setF(x); }}>${x}</button>`;
             })}
           </div>
-          <a class="all" href="#tovabbi">További hírek <span aria-hidden="true">↓</span></a>
+          <button type="button" class="all" aria-expanded=${more ? "true" : "false"} aria-controls="more-list" onClick=${function(){ setMore(!more); }}>${more ? "Bezárás" : "További hírek"} <span aria-hidden="true">${more ? "↑" : "↓"}</span></button>
           <${ThemeToggle} />
         </div>
       </header>
@@ -899,9 +904,13 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
           <p class="stamp">${data.edition === "esti" ? "Esti" : "Reggeli"} kiadás · frissítve ${short(data.updated.slice(0,10))} ${hhmm}<br />Következő frissítés: ${next}</p>
           <${Elections} />
         </div>
-        <div class="swap" key=${"l-" + f}>
-          ${rest.length ? html`<ul class="list">${rest.map(function(a){ return html`<${Row} key=${a.url + a.title} a=${a} />`; })}</ul>` : html`<p class="empty">A rovat összes mai híre fent látható.</p>`}
-          <p class="note">A kártyák rövid összefoglalók, a teljes cikk mindig az eredeti forrásnál olvasható.${credits.length ? " Képek: " + credits.map(function(a){ return a.credit; }).filter(function(v, i, arr){ return arr.indexOf(v) === i; }).join(", ") + "." : ""}</p>
+        <div class=${"drop" + (more ? " open" : "")} id="more-list">
+          <div class="drop-in" inert=${more ? null : ""}>
+            <div class="swap" key=${"l-" + f}>
+              ${rest.length ? html`<ul class="list">${rest.map(function(a, i){ return html`<${Row} key=${a.url + a.title} a=${a} i=${i} />`; })}</ul>` : html`<p class="empty">A rovat összes mai híre fent látható.</p>`}
+              <p class="note">A kártyák rövid összefoglalók, a teljes cikk mindig az eredeti forrásnál olvasható.${credits.length ? " Képek: " + credits.map(function(a){ return a.credit; }).filter(function(v, i, arr){ return arr.indexOf(v) === i; }).join(", ") + "." : ""}</p>
+            </div>
+          </div>
         </div>
       </section>
     </section>`;
