@@ -53,6 +53,39 @@ body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .all:hover span{transform:translateY(3px)}
 .all[aria-expanded="true"] span{transform:rotate(180deg)}
 .sec-toggle{margin-top:14px;padding:10px 0}
+/* ha csak ezt olvasod el */
+.must{margin-top:24px;padding:22px 26px 24px;background:var(--card);border-radius:20px;border-left:6px solid var(--verm);animation:rise .9s var(--ease) backwards;animation-delay:40ms}
+.must-h{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--verm)}
+.must-h::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--verm)}
+.must-list{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 36px}
+.must-list li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.must-n{font-family:var(--serif);font-size:28px;line-height:1;color:var(--verm);font-variant-numeric:tabular-nums}
+.must-a{color:var(--ink);text-decoration:none;font-size:15.5px;line-height:1.5}
+.must-a strong{font-weight:700}
+.must-a:hover{text-decoration:underline;text-decoration-color:var(--muted);text-underline-offset:3px}
+.must-src{display:block;margin-top:4px;font-size:12.5px;color:var(--muted)}
+
+/* cikknézet */
+.rd-back{position:fixed;inset:0;z-index:50;display:grid;justify-items:center;align-items:start;overflow-y:auto;padding:40px 16px;background:rgba(10,10,12,.58);animation:fade .25s var(--ease)}
+.rd{position:relative;width:min(780px,100%);background:var(--card);color:var(--ink);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,.55);animation:rise .5s var(--ease);outline:none}
+.rd-cover{aspect-ratio:16/9}
+.rd-body{display:flex;flex-direction:column;gap:16px;padding:26px 34px 30px}
+.rd-t{font-family:var(--serif);font-weight:500;font-size:clamp(26px,3.2vw,38px);line-height:1.12;letter-spacing:-.015em;text-wrap:balance}
+.rd-text{display:flex;flex-direction:column;gap:14px;font-size:16.5px;line-height:1.68;color:var(--ink);max-width:68ch}
+.rd-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:6px;padding-top:18px;border-top:1px solid var(--line)}
+.rd-go{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:12px;background:var(--ink);color:var(--paper);font:600 15px/1 var(--sans);text-decoration:none;white-space:nowrap}
+.rd-go:hover{opacity:.88}
+.rd-note{font-size:12.5px;color:var(--muted)}
+.rd-x{position:absolute;top:12px;right:12px;z-index:3;display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:999px;background:rgba(255,255,255,.9);color:#16161A;font:400 26px/1 var(--sans);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (max-width:1024px){ .must-list{grid-template-columns:1fr} }
+@media (max-width:640px){
+  .must{padding:18px 18px 20px}
+  .rd-back{padding:0}
+  .rd{border-radius:0;min-height:100%}
+  .rd-body{padding:20px 20px 32px}
+  .rd-go{width:100%;justify-content:center}
+}
 
 
 /* piacsáv */
@@ -316,6 +349,40 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
   }
  ],
  "marketsNote": "Hétvége, a tőzsdék zárva · USA: okt. 23. (péntek) záróár · DAX: okt. 23. (péntek) záróár · BUX: okt. 22. záróár (okt. 23. nemzeti ünnep, a BÉT zárva volt) · deviza: EKB okt. 23., az okt. 22-hez képest · BTC: Coinbase, 24 órás változás (szombat délután)",
+ "mustRead": [
+  {
+   "head": "Matolcsy Györgyöt letartóztatták.",
+   "text": "A Fővárosi Törvényszék egy hónapos letartóztatást rendelt el a volt jegybankelnökkel szemben az MNB-alapítványok ügyében; a döntés nem jogerős, fiát nemzetközi elfogatóparanccsal keresik.",
+   "source": "Telex",
+   "url": "https://telex.hu/gazdasag/2026/10/23/mnb-ugy-matolcsy-gyorgy-letartoztatas-birosag-ules",
+   "item": "https://telex.hu/gazdasag/2026/10/23/mnb-ugy-matolcsy-gyorgy-letartoztatas-birosag-ules"
+  },
+  {
+   "head": "Ukrajna: 4 halott, 78 sérült egy nap alatt.",
+   "text": "Az orosz támadások áldozatai főleg Csernyihiv, Donyeck és Dnyipropetrovszk megyében voltak; szombat hajnalban drón csapódott egy kijevi lakóházba, ketten megsérültek.",
+   "source": "Kyiv Independent",
+   "url": "https://kyivindependent.com/russian-attacks-kill-4-injure-78-across-ukraine-over-past-day-as-drone-strikes-kyiv-residential-building-in-the-morning/"
+  },
+  {
+   "head": "Franciaország: több mint 400 ezren tüntettek.",
+   "text": "A belügyminisztérium szerint 410 ezren vonultak utcára, köztük 110 ezren Párizsban; legalább 135 embert őrizetbe vettek, Párizsban és Lyonban könnygázt vetett be a rendőrség.",
+   "source": "Al Jazeera",
+   "url": "https://www.aljazeera.com/news/2026/10/24/france-braces-for-another-day-of-mass-protests-as-security-on-high-alert"
+  },
+  {
+   "head": "XIV. Leó pápának nincs szüksége további kezelésre.",
+   "text": "Az október 13-i műtétben eltávolították jobb tüdejének alsó lebenyét; a daganat az orvosok szerint lokalizált volt, további onkológiai kezelés nem kell.",
+   "source": "Vatican News",
+   "url": "https://www.vaticannews.va/en/pope/news/2026-10/pope-leo-xiv-doctors-confirm-no-further-treatment-necessary.html"
+  },
+  {
+   "head": "Vasárnap három országban választanak.",
+   "text": "Brazíliában elnökválasztási második forduló lesz, ahol Lula és Flávio Bolsonaro fej fej mellett áll; Bulgáriában az elnökválasztás első fordulója, Szerbiában előrehozott parlamenti választás.",
+   "source": "Al Jazeera, AP",
+   "url": "https://www.aljazeera.com/news/2026/10/24/brazils-lula-and-bolsonaro-about-even-ahead-of-election-run-off-poll",
+   "item": "https://www.aljazeera.com/news/2026/10/24/brazils-lula-and-bolsonaro-about-even-ahead-of-election-run-off-poll"
+  }
+ ],
  "elections": [
   {
    "date": "2026-10-25",
@@ -825,7 +892,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
   }
 
   function Title(p){
-    return html`<h3 class="title"><a href=${p.a.url} target="_blank" rel="noopener"><span class="u">${p.a.title}</span></a></h3>`;
+    return html`<h3 class="title"><a href=${p.a.url} target="_blank" rel="noopener" onClick=${opener(p.a)}><span class="u">${p.a.title}</span></a></h3>`;
   }
 
   function Featured(p){
@@ -863,15 +930,76 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
       <${Media} a=${a} cls="thumb" noCredit=${true} />
       <div class="rb">
         <div class="rmeta"><${Tag} c=${a.category} /><span class="rsrc"><${Avatar} a=${a} sm=${true} /><span>${a.source} · ${short(a.date)}</span></span></div>
-        <span class="t"><a href=${a.url} target="_blank" rel="noopener"><span class="u">${a.title}</span></a></span>
+        <span class="t"><a href=${a.url} target="_blank" rel="noopener" onClick=${opener(a)}><span class="u">${a.title}</span></a></span>
         <${Summary} a=${a} cls="rsum" />
       </div>
     </li>`;
   }
 
+  /* Cikknézet: kép felül, teljes összefoglaló, gomb az eredeti cikkre */
+  var api = { open: function(){} };
+  function opener(a){ return function(ev){ if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button > 0) return; ev.preventDefault(); api.open(a); }; }
+  function Reader(p){
+    var a = p.a, ref = React.useRef(null);
+    React.useEffect(function(){
+      var prev = document.activeElement, ov = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      var box = ref.current, x = box && box.querySelector(".rd-x");
+      if (x) x.focus();
+      function key(ev){
+        if (ev.key === "Escape") { p.onClose(); return; }
+        if (ev.key !== "Tab" || !box) return;
+        var f = box.querySelectorAll("a[href],button");
+        if (!f.length) return;
+        var first = f[0], last = f[f.length - 1];
+        if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+      }
+      document.addEventListener("keydown", key);
+      return function(){ document.removeEventListener("keydown", key); document.body.style.overflow = ov; if (prev && prev.focus) prev.focus(); };
+    }, []);
+    return html`<div class="rd-back" onClick=${p.onClose}>
+      <div class="rd" role="dialog" aria-modal="true" aria-labelledby="rd-t" ref=${ref} onClick=${function(ev){ ev.stopPropagation(); }}>
+        <button type="button" class="rd-x" onClick=${p.onClose} aria-label="Cikk bezárása">×</button>
+        <${Media} a=${a} cls="rd-cover">
+          <div class="badges"><${Tag} c=${a.category} /></div>
+        <//>
+        <div class="rd-body">
+          <div class="meta"><span>${long(a.date)}</span><span class="sep" aria-hidden="true"></span><span>${a.readMin} perc olvasás</span></div>
+          <h2 class="rd-t" id="rd-t">${a.title}</h2>
+          <div class="rd-text">${paras(a).map(function(t, i){ return html`<p key=${i}>${t}</p>`; })}</div>
+          <div class="rd-foot">
+            <div class="who"><${Avatar} a=${a} /><div><div class="name">${a.source}</div><div class="role">${a.role}</div></div></div>
+            <a class="rd-go" href=${a.url} target="_blank" rel="noopener">Eredeti cikk <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="rd-note">Ez rövid összefoglaló; a teljes cikk az eredeti forrásnál olvasható.</p>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  /* Ha csak ezt olvasod el: a nap kihagyhatatlan hírei (data.mustRead) */
+  function MustRead(){
+    var list = data.mustRead || [];
+    if (!list.length) return null;
+    return html`<section class="must" aria-labelledby="must-h">
+      <h3 class="must-h" id="must-h">Ha csak ezt olvasod el</h3>
+      <ol class="must-list">${list.map(function(m, i){
+        var it = null;
+        for (var k = 0; k < ITEMS.length; k++) if (m.item && ITEMS[k].url === m.item) { it = ITEMS[k]; break; }
+        return html`<li key=${i}><span class="must-n" aria-hidden="true">${i + 1}</span><div>
+          <a class="must-a" href=${m.url || (it && it.url)} target="_blank" rel="noopener" onClick=${it ? opener(it) : undefined}><strong>${m.head}</strong> ${m.text}</a>
+          <span class="must-src">${m.source}${it ? " · kattints a részletekért" : ""}</span>
+        </div></li>`;
+      })}</ol>
+    </section>`;
+  }
+
   function App(){
     var st = useState("Összes"), f = st[0], setF = st[1];
     var mo = useState(false), more = mo[0], setMore = mo[1];
+    var ar = useState(null), article = ar[0], setArticle = ar[1];
+    api.open = setArticle;
     function toggleMore(){
       if (more) { setMore(false); return; }
       var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -900,6 +1028,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
       </header>
 
       ${data._stale && html`<p class="stale" role="status">Az élő adatforrás épp ébred, ez a legutóbbi mentett kiadás. Pár másodperc múlva magától frissül.</p>`}
+      <${MustRead} />
       <${Markets} />
 
       <div class="grid swap" key=${"g-" + f} aria-live="polite">
@@ -923,6 +1052,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
           </div>
         </div>
       </section>
+      ${article && html`<${Reader} a=${article} onClose=${function(){ setArticle(null); }} />`}
     </section>`;
   }
 
