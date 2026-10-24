@@ -1,4 +1,5 @@
 <!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Discord Gang hírek: belpolitika, külpolitika, tech és AI, piacok és közelgő választások. Naponta kétszer frissül."><meta name="dg-news-source" content="https://tuqrsvcduyeeuxhqrgcs.supabase.co" data-key="sb_publishable_2skOUSLCLPyEQ7V-neEgqg_0wVJJIi3"><meta name="referrer" content="no-referrer"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%2316161A%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%226%22 fill=%22%23E4462B%22/%3E%3C/svg%3E"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Discord Gang Hírek</title>
+<script>(function(){ var t = "light"; try { t = localStorage.getItem("dg-theme") || "light"; } catch (e) {} document.documentElement.setAttribute("data-dg-theme", t === "dark" ? "dark" : "light"); })();</script>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -8,7 +9,7 @@
 <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
 
 <style>
-/* Csak világos mód (tudatos döntés). Layout: nyomtatott magazin; piacsáv, egy kiemelt + három vízszintes kártya, alatta hírlista és közelgő választások */
+/* Világos alapértelmezés, sötét mód kapcsolóval (data-dg-theme). Layout: nyomtatott magazin; piacsáv, egy kiemelt + három vízszintes kártya, alatta hírlista és közelgő választások */
 :root{
   --paper:#F4F1EA; --card:#FFFFFF; --ink:#16161A; --muted:#6B6A66; --line:#E2DDD2; --soft:#ECE7DC;
   --blue:#23408E; --verm:#E4462B; --green:#2F7A5B; --ochre:#D69A2D; --ochre-ink:#1A1405; --cream:#EFE7D6;
@@ -18,6 +19,10 @@
   --ease:cubic-bezier(.22,1,.36,1);
   --gutter:40px;
   color-scheme:light;
+}
+:root[data-dg-theme="dark"]{
+  --paper:#141416; --card:#1D1D21; --ink:#F2EFE8; --muted:#A9A69F; --line:#2E2D30; --soft:#26252A;
+  --focus:#FF6A4F; --up:#4CC38A; --down:#FF7A63; color-scheme:dark;
 }
 html,body{background:var(--paper);color:var(--ink)}
 h2,h3,p,ul{margin:0}
@@ -40,6 +45,9 @@ body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .pill{height:40px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font:500 15px/1 var(--sans);white-space:nowrap;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)}
 .pill:hover{border-color:var(--ink)}
 .pill[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.theme{flex:none;display:inline-grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);cursor:pointer;transition:border-color .3s var(--ease),background .3s var(--ease)}
+.theme:hover{border-color:var(--ink)}
+.theme svg{width:18px;height:18px;display:block}
 .all{display:inline-flex;align-items:center;gap:6px;font:600 15px/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;padding:10px 4px}
 .all span{transition:transform .3s var(--ease)}
 .all:hover span{transform:translateY(3px)}
@@ -669,7 +677,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
     } else if (t === 4) {
       var ox = r() > .5 ? 0 : 160, oy = r() > .5 ? 100 : 0, step = 7 + r() * 5;
       add(html`<rect key=${k++} width="160" height="100" fill=${C.cream} />`);
-      for (var i = 0; i < 26; i++) add(html`<circle key=${k++} cx=${ox} cy=${oy} r=${200 - i * step} fill=${i % 2 ? C.cream : cols[0]} />`);
+      for (var i = 0; i < 26 && 200 - i * step > 0; i++) add(html`<circle key=${k++} cx=${ox} cy=${oy} r=${200 - i * step} fill=${i % 2 ? C.cream : cols[0]} />`);
       add(html`<circle key=${k++} cx=${40 + r() * 80} cy=${20 + r() * 40} r=${12 + r() * 9} fill=${C.ink} />`);
     } else {
       add(html`<defs key=${k++}><linearGradient id=${id} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#EADDC6" /><stop offset="1" stopColor="#D5C19E" /></linearGradient></defs>`);
@@ -738,6 +746,24 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
         </li>`;
       })}</ul>
     </div>`;
+  }
+
+  /* Világos / sötét mód kapcsoló; a választást a böngésző megjegyzi */
+  function ThemeToggle(){
+    var cur = document.documentElement.getAttribute("data-dg-theme") === "dark" ? "dark" : "light";
+    var st = useState(cur), t = st[0], setT = st[1];
+    function flip(){
+      var n = t === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-dg-theme", n);
+      try { localStorage.setItem("dg-theme", n); } catch (e) {}
+      setT(n);
+    }
+    var label = t === "dark" ? "Világos mód" : "Sötét mód";
+    return html`<button type="button" id="theme-toggle" class="theme" onClick=${flip} aria-label=${label} title=${label}>
+      ${t === "dark"
+        ? html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" /></svg>`
+        : html`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" /></svg>`}
+    </button>`;
   }
 
   function Tag(p){
@@ -855,6 +881,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
             })}
           </div>
           <a class="all" href="#tovabbi">További hírek <span aria-hidden="true">↓</span></a>
+          <${ThemeToggle} />
         </div>
       </header>
 
