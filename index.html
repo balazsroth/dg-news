@@ -1,0 +1,913 @@
+<!doctype html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Discord Gang hírek: belpolitika, külpolitika, tech és AI, piacok és közelgő választások. Naponta kétszer frissül."><meta name="dg-news-source" content="https://tuqrsvcduyeeuxhqrgcs.supabase.co" data-key="sb_publishable_2skOUSLCLPyEQ7V-neEgqg_0wVJJIi3"><meta name="referrer" content="no-referrer"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%2316161A%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%226%22 fill=%22%23E4462B%22/%3E%3C/svg%3E"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Discord Gang Hírek</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
+
+<style>
+/* Csak világos mód (tudatos döntés). Layout: nyomtatott magazin; piacsáv, egy kiemelt + három vízszintes kártya, alatta hírlista és közelgő választások */
+:root{
+  --paper:#F4F1EA; --card:#FFFFFF; --ink:#16161A; --muted:#6B6A66; --line:#E2DDD2; --soft:#ECE7DC;
+  --blue:#23408E; --verm:#E4462B; --green:#2F7A5B; --ochre:#D69A2D; --ochre-ink:#1A1405; --cream:#EFE7D6;
+  --focus:#E4462B; --up:#1E7A4C; --down:#C2331C;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --gutter:40px;
+  color-scheme:light;
+}
+html,body{background:var(--paper);color:var(--ink)}
+h2,h3,p,ul{margin:0}
+*,*::before,*::after{box-sizing:border-box}
+body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+.wrap{max-width:1280px;margin:0 auto;padding-block:48px 64px;
+  padding-left:max(var(--gutter), env(safe-area-inset-left,0px));
+  padding-right:max(var(--gutter), env(safe-area-inset-right,0px));}
+
+/* fejléc */
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px 40px;padding-bottom:28px;border-bottom:1px solid var(--ink)}
+.eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--verm)}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--verm)}
+.h2{font-family:var(--serif);font-weight:500;font-size:clamp(40px,5vw,68px);line-height:1.02;letter-spacing:-.025em;margin-top:10px;text-wrap:balance}
+.h2 em{font-style:italic;color:var(--muted)}
+.tools{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0;flex:none;max-width:100%}
+.pills{display:flex;flex-wrap:nowrap;gap:10px;min-width:0}
+.pill{flex:none}
+.pill{height:40px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font:500 15px/1 var(--sans);white-space:nowrap;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)}
+.pill:hover{border-color:var(--ink)}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.all{display:inline-flex;align-items:center;gap:6px;font:600 15px/1 var(--sans);color:var(--ink);text-decoration:none;white-space:nowrap;padding:10px 4px}
+.all span{transition:transform .3s var(--ease)}
+.all:hover span{transform:translateY(3px)}
+
+
+/* piacsáv */
+.markets{display:grid;grid-template-columns:1fr;gap:10px;padding:16px 0;border-bottom:1px solid var(--line);animation:rise .9s var(--ease) backwards;animation-delay:60ms}
+.mk-h{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.mk-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.mk-note{font-size:12px;line-height:1.45;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;min-width:0}
+.tile{background:var(--card);border-radius:12px;padding:10px 12px;min-width:0}
+.tile .n{font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tile .v{font-size:17px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:2px}
+.tile .c{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:1px}
+.tile .c.up{color:var(--up)} .tile .c.down{color:var(--down)} .tile .c.flat{color:var(--muted)}
+
+/* választások */
+.elx{margin-top:28px}
+.elx h4{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin:0 0 10px}
+.elx ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.elx li{position:relative;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.elx .day{font-family:var(--serif);font-size:26px;line-height:1;text-align:center;font-variant-numeric:tabular-nums}
+.elx .mon{display:block;font-family:var(--sans);font-size:11px;font-weight:600;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
+.elx .ct{font-weight:600;font-size:14px}
+.elx .ct a{color:var(--ink);text-decoration:none}
+.elx .ct a::after{content:"";position:absolute;inset:0}
+.elx .ty{font-size:13px;color:var(--muted)}
+.elx .cd{color:var(--verm);font-weight:600}
+
+/* rács */
+.grid{display:grid;grid-template-columns:1.35fr 1fr;grid-template-rows:repeat(3,auto);gap:24px;margin-top:28px}
+.card{position:relative;background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 1px 0 rgba(22,22,26,.04);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),filter .4s var(--ease),opacity .4s var(--ease);
+  animation:rise .9s var(--ease) backwards;animation-delay:calc(var(--i,0) * 110ms)}
+.card:hover{transform:translateY(-3px);box-shadow:0 24px 50px -24px rgba(22,22,26,.28)}
+.card.dim{filter:grayscale(1);opacity:.32}
+.feat{display:flex;flex-direction:column}
+.swap{animation:rise .6s var(--ease) backwards}
+.stale{margin-top:16px;padding:10px 14px;border-radius:10px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:14px}
+.empty{color:var(--muted);font-size:15px;padding:24px 0}
+.small{display:grid;grid-template-columns:42% 1fr;min-height:170px}
+.head{animation:rise .9s var(--ease) backwards}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* borító */
+.cover{position:relative;overflow:hidden;background:var(--soft);min-width:0}
+.feat .cover{aspect-ratio:16/8;max-width:100%}
+@media (min-width:1025px){.feat .cover{aspect-ratio:auto;flex:1 1 auto;min-height:clamp(260px,26vw,380px)} .feat .body{flex:none}}
+.art{position:absolute;inset:0;transition:transform 1s var(--ease)}
+.card:hover .art,.card:hover .ph,.row:hover .ph,.row:hover .art{transform:scale(1.07)}
+.ph{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;display:block;transition:transform 1s var(--ease);background:var(--soft)}
+.credit{position:absolute;right:10px;bottom:10px;z-index:1;padding:3px 8px;border-radius:6px;background:rgba(10,10,12,.62);color:#fff;font-size:11px;line-height:1.3;pointer-events:none}
+.art svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.small .who{flex-wrap:wrap;row-gap:4px}
+.small .who .date{white-space:nowrap}
+.sum,.rsum{display:flex;flex-direction:column;gap:8px;color:var(--muted)}
+.sum{font-size:14px;line-height:1.55}
+.sum:not(.open) p:first-child{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.excerpt{display:flex;flex-direction:column;gap:10px}
+.expand{position:relative;z-index:3;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;margin-top:2px;padding:6px 0;border:0;background:none;color:var(--ink);font:600 13px/1.2 var(--sans);cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.expand:hover{text-decoration-color:currentColor}
+.art span{position:absolute;display:block}
+
+/* blocks: papírívek és hengerek hosszú árnyékkal */
+.art.blocks{background:linear-gradient(118deg,#E9DCC4 0%,#E1D1B4 48%,#D7C4A3 100%)}
+.art.blocks::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(118deg,rgba(255,255,255,.0) 0 9%,rgba(60,40,10,.10) 9% 15%,rgba(255,255,255,0) 15% 24%)}
+.art.blocks::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12%;background:#CDB894}
+.blocks .a1{left:14%;bottom:12%;width:30%;height:74%;background:#F0E6D3;border-radius:999px 999px 0 0;box-shadow:inset -10px 0 0 rgba(0,0,0,.06)}
+.blocks .a1i{left:21%;bottom:12%;width:16%;height:52%;background:#D9C7A6;border-radius:999px 999px 0 0}
+.blocks .a2{left:46%;bottom:12%;width:24%;height:56%;background:#1E2A44;border-radius:999px 999px 0 0}
+.blocks .a2i{left:52%;bottom:12%;width:12%;height:36%;background:#D7C4A3;border-radius:999px 999px 0 0}
+.blocks .c1{left:6%;bottom:8%;width:10%;height:38%;background:#22345E;border-radius:6px 6px 2px 2px;box-shadow:inset -8px 0 0 rgba(0,0,0,.18)}
+.blocks .c2{left:34%;bottom:7%;width:9%;height:30%;background:#F3EBDD;border-radius:6px 6px 2px 2px;box-shadow:inset -8px 0 0 rgba(0,0,0,.08)}
+.blocks .c3{left:72%;bottom:12%;width:7%;height:66%;background:#EFE5D2;border-radius:6px 6px 0 0;box-shadow:inset -6px 0 0 rgba(0,0,0,.07)}
+.blocks .q1{left:63%;bottom:7%;width:26%;height:24%;background:#D69A2D;border-radius:999px 999px 0 0;box-shadow:inset -12px 0 0 rgba(0,0,0,.12)}
+.blocks .c4{left:86%;bottom:9%;width:8%;height:36%;background:#22345E;border-radius:6px 6px 2px 2px;box-shadow:inset -6px 0 0 rgba(0,0,0,.18)}
+
+/* orbit: kék alapon egymásba ágyazott körök + okker csepp */
+.art.orbit{background:var(--blue)}
+.orbit .r1{width:118%;aspect-ratio:1;left:-58%;top:50%;transform:translateY(-50%);border-radius:50%;background:var(--verm)}
+.orbit .r2{width:76%;aspect-ratio:1;left:-38%;top:50%;transform:translateY(-50%);border-radius:50%;background:#F1EADB}
+.orbit .r3{width:30%;aspect-ratio:1;left:0;top:0;border-radius:0 0 999px 0;background:#16161A}
+.orbit .drop{width:34%;aspect-ratio:1;right:10%;bottom:12%;border-radius:0 50% 50% 50%;background:var(--ochre)}
+
+/* arch: zöld és krém csíkok előtt fekete boltív vermilion sávval */
+.art.arch{background:repeating-linear-gradient(90deg,var(--green) 0 14px,#EDE6D6 14px 28px)}
+.arch .ar{left:18%;width:64%;bottom:20%;height:56%;background:#16161A;border-radius:999px 999px 0 0}
+.arch .band{left:18%;width:64%;bottom:12%;height:10%;background:var(--verm)}
+
+/* split: átlós sík, kör és sáv */
+.art.split{background:linear-gradient(135deg,var(--green) 0 50%,#EDE6D6 50% 100%)}
+.split .dot{width:46%;aspect-ratio:1;left:27%;top:50%;transform:translateY(-50%);border-radius:50%;background:#16161A}
+.split .bar{left:10%;right:10%;bottom:14%;height:9%;background:var(--ochre)}
+.split .tiny{width:12%;aspect-ratio:1;right:9%;top:12%;border-radius:50%;background:var(--verm)}
+
+/* grid: okker alap, pontrács, negyedkör */
+.art.dots{background-color:var(--ochre);background-image:radial-gradient(#1A1405 1.6px,transparent 1.8px);background-size:16px 16px}
+.dots .qc{width:70%;aspect-ratio:1;right:-20%;bottom:-30%;border-radius:50%;background:#EDE6D6}
+.dots .sq{width:22%;aspect-ratio:1;left:12%;top:16%;background:var(--blue)}
+
+/* wave: vermilion koncentrikus ívek */
+.art.wave{background:repeating-radial-gradient(circle at 0% 100%,#EDE6D6 0 12px,var(--verm) 12px 26px)}
+.wave .sun{width:30%;aspect-ratio:1;right:12%;top:14%;border-radius:50%;background:#16161A}
+
+/* címkék */
+.tag{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;font:700 12px/1.2 var(--sans);color:#fff;letter-spacing:.01em}
+.tag.ochre{color:var(--ochre-ink)}
+.badges{position:absolute;inset:16px 16px auto 16px;display:flex;justify-content:space-between;z-index:1;pointer-events:none}
+.glass{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 13px/1.2 var(--sans);color:#16161A}
+
+/* kártya szöveg */
+.body{display:flex;flex-direction:column;gap:14px;min-width:0}
+.feat .body{padding:24px 30px 26px;flex:1}
+.small .body{padding:20px 22px}
+.meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.meta .sep{width:3px;height:3px;border-radius:50%;background:var(--muted)}
+.title{font-family:var(--serif);font-weight:500;letter-spacing:-.015em;line-height:1.12;text-wrap:balance;color:var(--ink)}
+.feat .title{font-size:clamp(26px,2.2vw,32px)}
+.small .title{font-size:22px}
+.title a{color:inherit;text-decoration:none}
+.title a::after{content:"";position:absolute;inset:0;z-index:2;border-radius:20px}
+.title .u{background-image:linear-gradient(currentColor,currentColor);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1px;transition:background-size .5s var(--ease);padding-bottom:2px}
+.card:hover .title .u,.title a:focus-visible .u{background-size:100% 1px}
+.excerpt{font-size:16px;line-height:1.6;color:var(--muted);max-width:62ch}
+.foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;border-top:1px solid var(--line)}
+.who{display:flex;align-items:center;gap:12px;min-width:0}
+.av{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:700 12px/1 var(--sans);color:#fff}
+.av.ochre{color:var(--ochre-ink)}
+.small .av{width:30px;height:30px}
+.av.logo{background:#fff;border:1px solid var(--line);overflow:hidden}
+.av.logo img{width:70%;height:70%;object-fit:contain;display:block}
+.av.sm{width:18px;height:18px;font-size:8px}
+.av.sm.logo img{width:80%;height:80%}
+.rsrc{display:inline-flex;align-items:center;gap:6px}
+.name{font-weight:600;font-size:15px;color:var(--ink)}
+.role{font-size:13px;color:var(--muted);margin-top:2px}
+.small .who{margin-top:auto;font-size:14px}
+.small .who .date{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:12px;background:var(--paper);color:var(--ink);font:600 15px/1 var(--sans);white-space:nowrap;transition:background .4s var(--ease),color .4s var(--ease)}
+.btn .arr{transition:transform .4s var(--ease)}
+.feat:hover .btn{background:var(--ink);color:var(--paper)}
+.feat:hover .btn .arr{transform:translateX(3px)}
+
+/* további hírek */
+.more{margin-top:48px;display:grid;grid-template-columns:240px 1fr;gap:24px 40px;animation:rise .9s var(--ease) backwards;animation-delay:550ms}
+.more h3{font-family:var(--serif);font-weight:500;font-size:28px;letter-spacing:-.015em;line-height:1.1}
+.stamp{margin-top:10px;font-size:13px;line-height:1.55;color:var(--muted);font-variant-numeric:tabular-nums}
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.row{position:relative;display:grid;grid-template-columns:148px 1fr;align-items:start;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
+.thumb{aspect-ratio:4/3;border-radius:12px;max-width:100%}
+.rb{display:flex;flex-direction:column;gap:6px;min-width:0}
+.rmeta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.rsum{font-size:14.5px;line-height:1.55;max-width:70ch}
+.row.dim{filter:grayscale(1);opacity:.32}
+.row .t{font-family:var(--serif);font-size:20px;line-height:1.25;letter-spacing:-.01em;min-width:0}
+.row .t a{color:var(--ink);text-decoration:none}
+.row .t a::after{content:"";position:absolute;inset:0}
+.row:hover .t .u{background-size:100% 1px}
+.row .src{font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.note{margin-top:18px;font-size:13px;color:var(--muted)}
+
+a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:6px}
+.title a:focus-visible{outline:none}
+.title a:focus-visible::after{outline:2px solid var(--focus);outline-offset:3px}
+
+/* tablet */
+@media (max-width:1024px){
+  .head{grid-template-columns:1fr}
+  .tools{justify-content:flex-start;flex-wrap:wrap;width:100%}
+  .grid{grid-template-columns:1fr}
+  .feat{grid-row:auto}
+  .more{grid-template-columns:1fr}
+  .markets{grid-template-columns:1fr}
+  .tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+/* mobil */
+@media (max-width:640px){
+  :root{--gutter:18px}
+  .wrap{padding-block:32px 48px}
+  .tools{display:block}
+  .pills{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    margin-left:calc(-1 * max(var(--gutter), env(safe-area-inset-left,0px)));
+    margin-right:calc(-1 * max(var(--gutter), env(safe-area-inset-right,0px)));
+    padding-left:max(var(--gutter), env(safe-area-inset-left,0px));
+    padding-right:max(var(--gutter), env(safe-area-inset-right,0px))}
+  .pills::-webkit-scrollbar{display:none}
+  .pill{height:44px;flex:none}
+  .all{margin-top:8px}
+  .small{grid-template-columns:1fr}
+  .small .cover{aspect-ratio:16/9}
+  .feat .body{padding:20px 20px 22px}
+  .foot{flex-direction:column;align-items:stretch}
+  .btn{justify-content:center}
+  .row{grid-template-columns:96px 1fr;gap:14px}
+  .row .t{font-size:18px}
+  .rsum{font-size:14px}
+  .tiles{display:flex;overflow-x:auto;scrollbar-width:none;
+    margin-left:calc(-1 * max(var(--gutter), env(safe-area-inset-left,0px)));
+    margin-right:calc(-1 * max(var(--gutter), env(safe-area-inset-right,0px)));
+    padding-left:max(var(--gutter), env(safe-area-inset-left,0px));
+    padding-right:max(var(--gutter), env(safe-area-inset-right,0px))}
+  .tiles::-webkit-scrollbar{display:none}
+  .tile{flex:none;width:132px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .card:hover{transform:none}
+  .card:hover .art{transform:none}
+}
+</style>
+
+<!-- NEWS-DATA:START -->
+<script type="application/json" id="news-data">
+{
+ "edition": "esti",
+ "updated": "2026-10-24T18:00:00+02:00",
+ "markets": [
+  {
+   "label": "S&P 500",
+   "value": 7623.68,
+   "change": -0.52,
+   "dec": 2
+  },
+  {
+   "label": "Nasdaq",
+   "value": 25955.34,
+   "change": -0.21,
+   "dec": 2
+  },
+  {
+   "label": "DAX",
+   "value": 25181.65,
+   "change": -0.75,
+   "dec": 2
+  },
+  {
+   "label": "BUX",
+   "value": 142048.59,
+   "change": -0.89,
+   "dec": 2
+  },
+  {
+   "label": "EUR/HUF",
+   "value": 366.73,
+   "change": 0.08,
+   "dec": 2
+  },
+  {
+   "label": "USD/HUF",
+   "value": 327.64,
+   "change": 0.19,
+   "dec": 2
+  },
+  {
+   "label": "BTC/USD",
+   "value": 80681,
+   "change": -1.27,
+   "dec": 0
+  }
+ ],
+ "marketsNote": "Hétvége, a tőzsdék zárva · USA: okt. 23. (péntek) záróár · DAX: okt. 23. (péntek) záróár · BUX: okt. 22. záróár (okt. 23. nemzeti ünnep, a BÉT zárva volt) · deviza: EKB okt. 23., az okt. 22-hez képest · BTC: Coinbase, 24 órás változás (szombat délután)",
+ "elections": [
+  {
+   "date": "2026-10-25",
+   "country": "Brazília",
+   "type": "elnökválasztás, 2. forduló",
+   "url": "https://en.wikipedia.org/wiki/2026_Brazilian_general_election"
+  },
+  {
+   "date": "2026-10-25",
+   "country": "Bulgária",
+   "type": "elnökválasztás, 1. forduló",
+   "url": "https://en.wikipedia.org/wiki/2026_Bulgarian_presidential_election"
+  },
+  {
+   "date": "2026-10-25",
+   "country": "Szerbia",
+   "type": "előrehozott parlamenti választás",
+   "url": "https://europeanwesternbalkans.com/2026/09/09/vucic-calls-snap-parliamentary-election-in-serbia-for-25-october/"
+  },
+  {
+   "date": "2026-10-27",
+   "country": "Izrael",
+   "type": "parlamenti (Knesszet)",
+   "url": "https://en.wikipedia.org/wiki/2026_Israeli_legislative_election"
+  },
+  {
+   "date": "2026-11-01",
+   "country": "Bulgária",
+   "type": "elnökválasztás, 2. forduló (ha szükséges)",
+   "url": "https://bntnews.bg/news/parliament-sets-date-for-presidential-election-1405826news.html"
+  },
+  {
+   "date": "2026-11-03",
+   "country": "Egyesült Államok",
+   "type": "félidős kongresszusi",
+   "url": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  }
+ ],
+ "items": [
+  {
+   "title": "Egy hónapra letartóztatták Matolcsy Györgyöt, fiát nemzetközi elfogatóparanccsal keresik",
+   "summary": [
+    "A Fővárosi Törvényszék pénteken egy hónapos letartóztatást rendelt el Matolcsy György volt jegybankelnökkel szemben az MNB-alapítványok ügyében; a reggel 9-kor kezdődött ülés este 6 előtt ért véget. A döntés nem jogerős, mert a gyanúsítottak fellebbeztek. Az ügyészség szerint egy színlelt értékpapír-kölcsönszerződéssel juttatták a PADME Alapítvány vagyona feletti rendelkezést olyan körhöz, amelyre Matolcsy mandátuma után is befolyással lehetett, ami több száz millió forintos kárt okozott.",
+    "A gyanú jelentős vagyoni hátrányt okozó, különösen súlyos gazdasági csalás és más bűncselekmények. A bíróság szökés, a tanúk befolyásolása és a bűnismétlés veszélyére hivatkozott, és nem talált okot enyhébb intézkedésre; letartóztatták Sándor Tamás ügyvédet és Valkó Mihály cégvezetőt is. A védelem óvadékot ajánlott, a Telex értesülése szerint 30 millió forintot, amit a nyomozási bíró elutasított; Matolcsy nem ismerte el felelősségét.",
+    "A Központi Nyomozó Főügyészség európai és nemzetközi elfogatóparancsot indítványozott a külföldön tartózkodó Matolcsy Ádám és Stofa György ellen, belföldi elfogatóparancs szerda óta van érvényben. Kósa Lajos, a Fidesz debreceni elnöke a Debreciner interjújában „látványpékségnek” nevezte az Orbán-kormányok tisztségviselőinek letartóztatását, amellyel szerinte a kormány a teljesítetlen ígéretekről tereli el a figyelmet."
+   ],
+   "category": "Belpolitika",
+   "date": "2026-10-23",
+   "readMin": 7,
+   "source": "Telex",
+   "initials": "TX",
+   "role": "hírportál",
+   "url": "https://telex.hu/gazdasag/2026/10/23/mnb-ugy-matolcsy-gyorgy-letartoztatas-birosag-ules",
+   "image": "https://assets.telex.hu/images/20261023/1792758323-temp-6k8545fi87tveloibmm_facebook.jpg",
+   "credit": "Bődey János / Telex"
+  },
+  {
+   "title": "Brazília: a vasárnapi második forduló előtt Lula és Flávio Bolsonaro továbbra is fej fej mellett",
+   "summary": [
+    "A szombaton közölt CNT/MDA-felmérés szerint Flávio Bolsonaro 46,3, Luiz Inácio Lula da Silva 45 százalékon áll a vasárnapi elnökválasztási második forduló előtt, ami a 2,2 százalékpontos hibahatáron belül van. Az október 21. és 23. között 2032 megkérdezettel készült kutatás előző hulláma 46,8-45,9 százalékot mért.",
+    "A csütörtökön közölt Datafolha-felmérésben a két jelölt 50-50 százalékon áll, két héttel korábban még Bolsonaro vezetett 4 ponttal. Az október 4-i első fordulóban Bolsonaro 47, Lula 45 százalékot kapott.",
+    "A pénteki utolsó tévévitán a gazdaság, az infrastruktúra és a regionális fejlesztés került elő; Bolsonaro azzal vádolta Lulát, hogy hagyta terjeszkedni a szervezett bűnözést, és nem kezelte a megélhetési költségeket. Lula így válaszolt: „Ő nem tudja, mi az éhség.”"
+   ],
+   "category": "Külpolitika",
+   "date": "2026-10-24",
+   "readMin": 2,
+   "source": "Al Jazeera",
+   "initials": "AJ",
+   "role": "nemzetközi hírcsatorna",
+   "url": "https://www.aljazeera.com/news/2026/10/24/brazils-lula-and-bolsonaro-about-even-ahead-of-election-run-off-poll",
+   "image": "https://www.aljazeera.com/wp-content/uploads/2026/10/reuters_6adccb39-1792854841.jpg?resize=1920%2C1440",
+   "credit": "Amanda Perobelli / Reuters"
+  },
+  {
+   "title": "100 millió fontos AI-biobiztonsági labort indít a brit kormány az OpenAI és az Anthropic támogatásával",
+   "summary": [
+    "A brit kormány 100 millió font (134 millió dollár) értékű AI Biosecurity Labot jelentett be, amely mesterséges intelligenciával észleli és követi a biológiai fenyegetéseket. A kormány közlése szerint a laborhoz az OpenAI és az Anthropic legfeljebb 200 millió font értékű modellhasználati kreditet ad, partnere pedig a Google DeepMind és a Basecamp Research élettudományi cég lesz.",
+    "A csomag része 65 millió font kórokozók elleni ellenintézkedésekre, további 120 millió font az AI Security Institute-nak, 23 millió font az AI Economics Institute-nak, valamint 130 millió font arra, hogy AI segítségével keressenek sebezhetőségeket a kritikus infrastruktúrában. A Sovereign AI Fund 120 millió fontos emelést kap, és a robotikára, fejlett gyártásra is kiterjeszti működését.",
+    "Kanishka Narayan brit AI-miniszter szerint ahogy az AI erősebbé válik, Nagy-Britanniának képesnek kell lennie megvédeni az embereket és alakítani a saját jövőjét. Matt Clifford, az Anthropic nemzetközi ügyekért felelős vezetője úgy fogalmazott, az AI egyszerre változtatja meg a biológiai kockázatokat és a biológiai felfedezések természetét."
+   ],
+   "category": "AI",
+   "date": "2026-10-23",
+   "readMin": 2,
+   "source": "Bloomberg",
+   "initials": "BB",
+   "role": "gazdasági hírügynökség",
+   "url": "https://uk.finance.yahoo.com/news/uk-vows-100-million-biosecurity-230100738.html",
+   "image": "https://s.yimg.com/lo/mysterio/api/861b1b5d4700066dad993d5481ed10cbc7cf5442842141d01b8facf1aaeabf24/lightyear_networkapi/resizefill_w1200%3Bquality_80%3Bformat_webp/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fbloomberg_holding_pen_162%2F8c4c678f70c9ac1cb213f7810fb2e2fa.jpg",
+   "credit": "Bloomberg / Comezora / Moment RF"
+  },
+  {
+   "title": "Önvezető autók Franciaországban: a Wayve, a Stellantis és az Nvidia a francia kormánnyal fog össze",
+   "summary": [
+    "A brit Wayve, a Stellantis, az Nvidia és a francia kormány pénteken Párizsban, az Assises du Véhicule Autonome rendezvényen jelentette be, hogy együtt gyorsítják az önvezető járművek franciaországi bevezetését, majd uniós terjesztését. A Stellantis L4-re felkészített platformjai a Wayve AI Driver szoftverét kapják, amely az Nvidia Halos OS rendszerére és Hyperion számítási és szenzorarchitektúrájára épül.",
+    "Konkrét menetrendet és járműszámot nem közöltek, a technológiát „az elkövetkező években” vezetik be; a közlekedési műveletekért felelős helyi francia partnerek egyeztetnek majd a szakszervezetekkel és a városvezetésekkel. Philippe Tabarot közlekedési miniszter szerint Franciaország úgy igazítja szabályozását, hogy gyorsuljon a fejlesztés, de megmaradjanak a szigorú biztonsági és adatszuverenitási követelmények."
+   ],
+   "category": "Tech",
+   "date": "2026-10-23",
+   "readMin": 3,
+   "source": "Wayve",
+   "initials": "WV",
+   "role": "a fejlesztő cég sajtóközleménye",
+   "url": "https://wayve.ai/press/wayve-stellantis-nvidia-collaborate-on-deployment-across-france/",
+   "image": "https://wayve.ai/wp-content/uploads/2026/10/bkg-landscape-sunrise-1.jpg",
+   "credit": "Wayve"
+  },
+  {
+   "title": "Szerbia vasárnap választ: Vučić miniszterelnöki ambíciói és a Diáklista kihívása",
+   "summary": [
+    "Szerbiában vasárnap előrehozott parlamenti választást tartanak: a 250 képviselőt egyetlen országos listán, arányos rendszerben választják, a bejutási küszöb 3 százalék, a kisebbségi listákra ez nem vonatkozik. Az urnák helyi idő szerint este 8-kor zárnak, az előzetes eredmények nagyjából két órával később várhatók; a választás eredetileg csak 2027 végén lett volna esedékes.",
+    "Aleksandar Vučić szeptemberben lemondott az államfői posztról, és a 2012 óta kormányzó Szerb Haladó Párt (SNS) miniszterelnök-jelöltjeként kampányol. Fő kihívója a 2024 novemberi, 16 halálos áldozatot követelő újvidéki előtetőomlás után indult mozgalomból született Diáklista, amely a jogállamiság helyreállítását és a korrupció elleni fellépést ígéri.",
+    "Az Al Jazeera szerint a diáklista jelöltjei keményvonalasak Koszovó ügyében, felülvizsgálnák az EU által közvetített megállapodásokat, és hivatalba lépésük után fél éven belül népszavazást tartanának az uniós tagságról. Jelena Vasiljević kutató szerint a választás „népszavazás arról, hogy folytatódjon-e az SNS-rendszer”, és a részvétel lesz a döntő."
+   ],
+   "category": "Külpolitika",
+   "date": "2026-10-23",
+   "readMin": 5,
+   "source": "Al Jazeera",
+   "initials": "AJ",
+   "role": "nemzetközi hírcsatorna",
+   "url": "https://www.aljazeera.com/news/2026/10/23/serbias-snap-election-whats-at-stake-and-can-students-unseat-vucic",
+   "image": "https://www.aljazeera.com/wp-content/uploads/2026/10/reuters_6adb2dc2-1792748994.jpg?resize=1920%2C1440",
+   "credit": "Uros Arsic / Reuters"
+  },
+  {
+   "title": "Így rendezi át a 2027-es költségvetés kiadásait a kormány: 1465 milliárdos megszorítás, béremelések",
+   "summary": [
+    "A Portfolio összesítése szerint a 2027-es költségvetés nagyjából 45 ezer milliárd forintos kiadási oldalán 1465 milliárd forintos, a GDP mintegy 1,5 százalékának megfelelő kiadáscsökkentés szerepel. Közben a szociális kiadások 734 milliárd forinttal nőnek, a közszféra béremelései 677 milliárd forintba kerülnek.",
+    "A szociális többletből 300 milliárd forint jut a családi pótlék megduplázására, 123 milliárd a legkisebb nyugdíjak és más alacsony juttatások emelésére, 90 milliárd a nyugdíjas SZÉP-kártya első ütemére. A tervezet szerint a minisztériumok a jövő évre áthozott mintegy 700 milliárd forintos megtakarításon felül további 447 milliárdot faragnak le.",
+    "Az Orbán-kormány három zászlóshajó intézkedése, az Otthon Start, a 14. havi nyugdíj és a szja-mentességek jövőre 1080 milliárd forintba kerültek volna; ezek egy részét a kormány megszünteti, kivezeti vagy nem folytatja. Kármán András pénzügyminiszter szerint szigorúan ellenőrzik a megszorítások végrehajtását, a Portfolio szerint ez a terv legnagyobb kockázata."
+   ],
+   "category": "Belpolitika",
+   "date": "2026-10-24",
+   "readMin": 2,
+   "source": "Portfolio",
+   "initials": "PF",
+   "role": "gazdasági hírportál",
+   "url": "https://www.portfolio.hu/gazdasag/20261024/egyetlen-kepen-hogyan-rendezi-at-az-orszag-kiadasait-a-tisza-kormany-beremelesek-es-nagy-elvonasok-is-jonnek-871650",
+   "image": "https://pcdn.hu/articles/images-xl/m/a/g/magyar-peter-karman-andras-koltsegvetes-2027-864180.jpg",
+   "credit": "Portfolio"
+  },
+  {
+   "title": "Általánosan elérhető az OpenAI Decisions API, amely teljes válasz helyett döntést ad vissza",
+   "summary": [
+    "Az OpenAI október 22-én általánosan elérhetővé tette a Decisions API-t, amely teljes szöveges válasz helyett kötött, típusos eredményt ad: valószínűséget, előre megadott opciók közüli választást vagy értékelési pontszámot. Egy kérés 1-400 kérdést tartalmazhat (korábban 200-at), és szöveget, üzenetláncot, eszközhívást és képet is fogadhat.",
+    "A szolgáltatás egyelőre csak a szeptemberben bemutatott gpt-6-luna modellel működik, ára millió bemeneti tokenenként 0,10 dollár (gyorsítótárazva 0,01 dollár), kimeneti díj nincs. Az OpenAI szerint a válaszok akár tízszer gyorsabban érkeznek, mint ha ugyanezt a Responses API-n kérdeznék.",
+    "Az ügyfelek közül a Datadog 40-szer gyorsabb p95 késleltetésről számolt be az AI agentek által generált kockázatos parancsok pontozásánál, a Ramp négyszer gyorsabb és 30 százalékkal olcsóbb működésről. A nyilvános béta óta bekerült a gyorsítótárazás, valamint az amerikai és uniós adatfeldolgozási rezidencia."
+   ],
+   "category": "AI",
+   "date": "2026-10-22",
+   "readMin": 5,
+   "source": "Unite.AI",
+   "initials": "UA",
+   "role": "AI szakportál",
+   "url": "https://www.unite.ai/openai-makes-decisions-api-generally-available-with-gpt-6-luna/",
+   "image": "https://www.unite.ai/wp-content/uploads/2026/10/openai-makes-decisions-api-generally-available-with-gpt-6-luna.jpg",
+   "credit": "Unite.AI"
+  },
+  {
+   "title": "Bulgária: a fekete-tengeri dróntámadások árnyékában választanak elnököt vasárnap",
+   "summary": [
+    "Bulgáriában vasárnap tartják az elnökválasztás első fordulóját; az AP szerint a kampányt az ukrajnai háború és a fekete-tengeri ellenségeskedés uralta, miután a hónapban legalább hét teherhajót ért dróntámadás Románia és Bulgária partjainál, két ember meghalt, legalább 25 eltűnt. A 6,6 millió választópolgárból 50 százalék feletti részvétel kellene az első fordulós győzelemhez, a várható részvétel 40 százalék alatti, így valószínű a november 1-jei második forduló.",
+    "A Market Links október 13-19. közötti, 1006 fős felmérésében Ilijana Jotova hivatalban lévő elnök 47,3, Andrej Gjurov volt ügyvivő miniszterelnök 30,6 százalékon áll. Jotova januárban vette át a hivatalt, amikor Rumen Radev lemondott, hogy parlamenti választáson induljon; független jelöltként Radev Progresszív Bulgária pártja és a szocialisták támogatják, Gjurovot a nyugatbarát reformellenzék.",
+    "Jotova a kampányban azt kérdezte: „Azt akarjuk, hogy a Fekete-tenger zárt katonai övezetté váljon?”, és azt mondta, ehhez semmiképp sem járulna hozzá. A szombati napon kampánycsend van, közvélemény-kutatást a szavazás végéig nem lehet közölni."
+   ],
+   "category": "Külpolitika",
+   "date": "2026-10-23",
+   "readMin": 3,
+   "source": "AP",
+   "initials": "AP",
+   "role": "amerikai hírügynökség",
+   "url": "https://www.yahoo.com/news/world/articles/bulgaria-vote-president-ukraine-black-094202568.html",
+   "image": "https://s.yimg.com/lo/mysterio/api/3d90ccc40a3668ef6be4616c741cfe65b84f32c24268262ca669867e32fea45a/lightyear_networkapi/resizefill_w1200%3Bquality_80%3Bformat_jpg/https%3A%2F%2Fmedia.zenfs.com%2Fen%2Fap.org%2F787686d5373412fc83954185b8be9e0e.jpg",
+   "credit": "AP Photo / Valentina Petrova"
+  },
+  {
+   "title": "A Patrióták EP-képviselői az Európai Bizottságnál kifogásolják a kormány intézkedéseit",
+   "summary": [
+    "A Fidesz-KDNP európai parlamenti delegációja szombaton közölte, hogy a Patrióták Európáért frakció magyar, francia, osztrák, olasz, spanyol és cseh képviselői közös írásbeli kérdést nyújtottak be az Európai Bizottsághoz a Magyar Péter vezette kormány intézkedései miatt. A közlemény „súlyos, autokratikus” lépésekről ír, és azt kérdezi, meddig hagyja ezeket Brüsszel válasz nélkül.",
+    "A képviselők szerint egy visszamenőleges hatályú alkotmánymódosítás az ellenzéki képviselők több mint felét kizárná az indulásból, az ügyészség pedig jogellenes eljárásban lefoglalta a legnagyobb ellenzéki párt szervereit; kifogásolják azt is, hogy a miniszterelnök bírósági döntés előtt jelentett be letartóztatásokat. Az uniós szerződés 2. és 19. cikkére, valamint az Alapjogi Charta 47. cikkére hivatkoznak.",
+    "A közlemény szerint „a demokrácia, a szabad választások és a politikai verseny védelme nem lehet politikai szimpátia kérdése”. A Bizottság válaszáról a cikk nem számol be."
+   ],
+   "category": "Belpolitika",
+   "date": "2026-10-24",
+   "readMin": 2,
+   "source": "HVG",
+   "initials": "HV",
+   "role": "hetilap és hírportál",
+   "url": "https://hvg.hu/itthon/20261024_europai-parlament-fidesz-kdnp-patriotak-frakcio-demokratikus-jogok",
+   "image": "https://img.hvg.hu/Img/8133bb77-3fc3-490f-b374-cb198a0455cc/10df2d0a-d7f6-410c-8de1-2b0ed07a292d.jpg",
+   "credit": "Dursun Aydemir / Anadolu / AFP"
+  },
+  {
+   "title": "A Rivian felvásárolta a valós felvételekből 3D-s szimulációt készítő Third Dimension AI-t",
+   "summary": [
+    "A Rivian elektromosautó-gyártó csütörtökön bejelentette, hogy felvásárolta a 2024-ben alapított Third Dimension AI-t, amelynek platformja valós adatokból vezérelhető 3D-s környezeteket készít, így a vezetési helyzetek nagy tömegben újraalkothatók és variálhatók. A pénzügyi részleteket nem hozták nyilvánosságra.",
+    "A cég vezetői és fejlesztői a Rivian önvezetési kutató- és fejlesztőcsapataihoz csatlakoznak, a technológia a vezetéstámogató és önvezető rendszerek szintetikus adatgenerálását és szimulációját gyorsítja. James Philbin, a Rivian önvezetésért és AI-ért felelős alelnöke szerint a szimuláció központi szerepet játszik a rendszereik tanításában és validálásában, a fogyasztói és a robotaxi-terveikben egyaránt."
+   ],
+   "category": "Tech",
+   "date": "2026-10-22",
+   "readMin": 3,
+   "source": "Business Wire",
+   "initials": "BW",
+   "role": "céges sajtóközlemény",
+   "url": "https://finance.yahoo.com/technology/ai/articles/rivian-acquires-third-dimension-ai-210400311.html",
+   "image": null,
+   "credit": null
+  },
+  {
+   "title": "Helyi tűzszünet Oleski városában, Putyin a jövő hónapban folytatná az amerikai közvetítésű tárgyalásokat",
+   "summary": [
+    "A Fehér Ház bejelentése szerint Melania Trump közvetítésével helyi tűzszünet jön létre az orosz megszállás alatt álló, mintegy 24 ezer lakosú Oleski városában, hogy segélyt juttathassanak be és evakuálhassák a civileket. Dmitro Lubinec ukrán ombudsman három lépést vázolt: tűzszünet, segélyszállítás, majd a civilek szabad távozása; az ukrán főtárgyaló szerint a megállapodást rendkívül nehéz lesz végrehajtani.",
+    "Valerij Geraszimov orosz vezérkari főnök azt közölte, hogy az orosz erők kedden moszkvai idő szerint hajnali 4-től beszüntetik a tüzet a herszoni irányban, ami eltér a helyi tűzszünetről korábban közölt időponttól. Az ABC szerint Vlagyimir Putyin Steve Witkoff különmegbízottal találkozva beleegyezett, hogy akár már jövő hónapban folytatódjanak az amerikai közvetítésű tárgyalások Ukrajnával.",
+    "Közben vita van a Starshield műholdas rendszer korlátozásairól: Volodimir Zelenszkij szerint azok érvényben maradtak, Donald Trump szerint már nem, és azt mondta, nem ő rendelte el a lassítást. Zelenszkij közölte, hogy az amerikai Patriot elfogórakéták szállítása továbbra is szünetel."
+   ],
+   "category": "Külpolitika",
+   "date": "2026-10-24",
+   "readMin": 3,
+   "source": "ABC News (Ausztrália)",
+   "initials": "AB",
+   "role": "ausztrál közszolgálati médium",
+   "url": "https://abc.net.au/news/2026-10-24/ukraine-latest/107304160",
+   "image": "https://live-production.wcms.abc-cdn.net.au/6168b73348c24e9c350b89e4ec5147ec?impolicy=wcms_watermark_news&cropH=720&cropW=1280&xPos=0&yPos=67&width=862&height=485&imformat=generic",
+   "credit": "Reuters / Kevin Lamarque"
+  },
+  {
+   "title": "Canva Craft: saját képgeneráló modellt mutatott be a Canva",
+   "summary": [
+    "A Canva bemutatta első saját képgeneráló modelljét, a Canva Craftot, amelyet a cég kutatócsapata épített, és a Google, az OpenAI, a ByteDance és a Meta modelljeivel kíván versenyezni. A modell két lépésben dolgozik: előbb megtervezi a térbeli viszonyokat, a méretarányokat, a vizuális hierarchiát és a szöveges tartalmat, majd legfeljebb 2K felbontású képet készít, akár 30 féle képarányban.",
+    "A modellt fényképek helyett emberek által tervezett Canva-sablonokon (plakátok, közösségi posztok, prezentációk, infografikák) tanították, a képek a Canva Magic segítségével rétegzett tervekké alakíthatók. Minden felhasználó elérheti a Dream Lab fülön és API-n, később az MCP-n keresztül a ChatGPT-ben és a Geminiben is; a TechCrunch szerint külső elemzők a cég értékelését 42 milliárdról 35 milliárd dollárra tették."
+   ],
+   "category": "AI",
+   "date": "2026-10-22",
+   "readMin": 2,
+   "source": "TechCrunch",
+   "initials": "TC",
+   "role": "tech hírportál",
+   "url": "https://techcrunch.com/2026/10/22/canva-releases-its-first-image-generation-model/",
+   "image": "https://techcrunch.com/wp-content/uploads/2026/10/Sample-Outputs.jpeg?resize=1200,675",
+   "credit": "Canva"
+  },
+  {
+   "title": "Havasi Bertalan: még nem jött el az idő, hogy Orbán Viktor a nyilvánosság elé álljon",
+   "summary": [
+    "Havasi Bertalan, Orbán Viktor sajtófőnöke a Népszavának azt mondta, azért nem szólalt fel a volt miniszterelnök a Fidesz október 23-i Bem téri rendezvényén, mert „még nem jött el az idő arra, hogy a volt miniszterelnök a nyilvánosság elé álljon”. Szerinte a visszatérés télen, jövő tavasszal vagy később jöhet.",
+    "Havasi szerint ez számos belföldi és külföldi tényezőtől függ, köztük gazdasági, politikai és társadalmi eseményektől és a költségvetés állapotától, és elképzelhető, hogy Orbán visszatérése egy Békemenettel esik egybe. Orbán Viktort október 23-án Párizsban fotózták le."
+   ],
+   "category": "Belpolitika",
+   "date": "2026-10-24",
+   "readMin": 2,
+   "source": "Portfolio",
+   "initials": "PF",
+   "role": "gazdasági hírportál",
+   "url": "https://www.portfolio.hu/gazdasag/20261024/kiderult-miert-nem-mondott-beszedet-orban-viktor-oktober-23-an-871776",
+   "image": "https://pcdn.hu/articles/images-xl/o/r/b/orban-viktor-havasi-bertalan-864252.jpg",
+   "credit": "MTI Fotó / Hegedüs Róbert"
+  },
+  {
+   "title": "1x1 milliméteres képérzékelőt mutatott be a Sony eldobható endoszkópokhoz",
+   "summary": [
+    "A Sony Semiconductor Solutions bemutatta az IMX742 jelű CMOS képérzékelőt, amely mindössze 1x1 milliméteres, és egyszer használatos orvosi endoszkópokba szánják. A szenzor a perifériás áramkörök kicsinyítésével nagyjából 0,51 megapixeles effektív felbontást és 60 képkocka/másodperces sebességet ér el.",
+    "A digitalizálás a szenzoron történik, a vezérlő- és videójel ugyanazon a kábelen halad, a HVG szerint 5 méteres kábelen is megbízhatóan továbbítja az adatot. A Sony eddig csak újrafelhasználható endoszkópokhoz kínált érzékelőt, az eldobható eszközök iránt a fertőzésveszély csökkentése miatt nő a kereslet."
+   ],
+   "category": "Tech",
+   "date": "2026-10-24",
+   "readMin": 2,
+   "source": "HVG",
+   "initials": "HV",
+   "role": "hetilap és hírportál",
+   "url": "https://hvg.hu/tudomany/20261024_sony-endoszkop-cmos-keperzekelo-imx742",
+   "image": "https://img.hvg.hu/Img/8133bb77-3fc3-490f-b374-cb198a0455cc/ce46ed0a-078d-42a1-8a46-c5492cc61a73.jpg",
+   "credit": "HVG"
+  },
+  {
+   "title": "Franciaország: 70 ezer rendőr és zárva tartó múzeumok az újabb országos tüntetések napján",
+   "summary": [
+    "Laurent Nuñez belügyminiszter szerint szombatra országszerte akár 70 ezer rendőrt vezényeltek ki helikopterekkel, páncélozott járművekkel és vízágyúkkal, miután az előző héten több mint félmillióan vonultak utcára. Lyonban, Nizzában és Montpellier-ben a helyi hatóságok betiltották a megmozdulásokat, Párizsban és Marseille-ben felvonulásokat terveztek.",
+    "Szombaton zárva maradt a Louvre, a Musée d'Orsay, a Picasso Múzeum és a Grand Palais, az Art Basel lemondta hétvégi programját, a Champs-Élysées üzletei bedeszkázták kirakataikat. Az AP szerint az előző hétvégén mintegy 3000 üzlet sérült meg vagy fosztották ki, Limoges-ban gyanítható gyújtogatás csaknem elpusztította a 19. századi városházát.",
+    "A tiltakozás délkelet-párizsi középiskolások jobb tanulási körülményeket követelő megmozdulásaiból indult, és a megélhetési költségek miatt terjedt át az egész országra. Mintegy 50 szervezet, köztük szakszervezetek, baloldali pártok és diákcsoportok a Nemzeti Tömörülés kétnapos kongresszusa idejére is tüntetést hirdetett."
+   ],
+   "category": "Külpolitika",
+   "date": "2026-10-24",
+   "readMin": 2,
+   "source": "CBS News / AP",
+   "initials": "CB",
+   "role": "amerikai hírcsatorna",
+   "url": "https://www.cbsnews.com/news/paris-france-new-protests-riots-museums-shops/",
+   "image": "https://assets2.cbsnewsstatic.com/hub/i/r/2026/10/24/7ff6ded2-2b73-4b05-9943-12c9abc061e8/thumbnail/1200x630/179307f80f41ce29567483c49a31b8ff/gettyimages-2301135556.jpg",
+   "credit": "Luc Auffret / Anadolu via Getty Images"
+  },
+  {
+   "title": "Mennyit érnek az Anthropic befektetőinek részesedései a várt tőzsdei bevezetés előtt",
+   "summary": [
+    "A TechCrunch a Bloomberg számításaira hivatkozva azt írta, hogy az Anthropic idén várt tőzsdei bevezetése akár 2 ezer milliárd dolláros értékelést hozhat, a legutóbbi magánértékelés 965 milliárd dollár volt. Eric Schmidt, aki a 2021-es A sorozatban 461 millió dolláros értékelésnél szállt be, mintegy 1 százalékos részesedése közel 10 milliárd dollárt ér.",
+    "Az ICONIQ tavalyi, 183 milliárd dolláros értékelésnél adott 6 milliárd dolláros befektetése most 17 milliárdot ér, a Menlo Ventures több mint 1 milliárd dolláros összbefektetése 14 milliárdot. A Spark Capital, az egyetlen igazgatósági hellyel rendelkező kockázatitőke-befektető, 2023-ban 75 millió dollárt fektetett be 5 milliárdos értékelésnél, ez ma mintegy 7 milliárd dollár; az értékek papíron, a magánkör árazása alapján értendők."
+   ],
+   "category": "AI",
+   "date": "2026-10-23",
+   "readMin": 2,
+   "source": "TechCrunch",
+   "initials": "TC",
+   "role": "tech hírportál",
+   "url": "https://techcrunch.com/2026/10/23/what-some-of-anthropics-backers-are-reportedly-worth-before-its-ipo/",
+   "image": "https://techcrunch.com/wp-content/uploads/2024/10/GettyImages-2181797246.jpg",
+   "credit": "Kimberly White / Getty Images for TechCrunch"
+  }
+ ]
+}
+</script>
+<!-- NEWS-DATA:END -->
+
+<div id="root"><div class="wrap" style="padding-block:48px"><div class="eyebrow">Discord Gang · Hírek</div><p class="h2" style="margin-top:10px">Friss hírek <em>betöltése…</em></p></div></div>
+
+<script>
+(function(){
+  var root = ReactDOM.createRoot(document.getElementById("root"));
+  function boot(data){
+  var e = React.createElement, html = htm.bind(e);
+  var useState = React.useState;
+
+  var CATS = {
+    "Belpolitika": { color: "var(--green)", ochre: false },
+    "Külpolitika": { color: "var(--verm)",  ochre: false },
+    "Tech":        { color: "var(--ochre)", ochre: true },
+    "AI":          { color: "var(--blue)",  ochre: false }
+  };
+  var FILTERS = ["Összes", "Belpolitika", "Külpolitika", "Tech", "AI"];
+  /* Generatív borító: minden hírnek saját, a címből számolt kompozíciója */
+  var C = { blue:"#23408E", verm:"#E4462B", green:"#2F7A5B", ochre:"#D69A2D", ink:"#16161A", cream:"#EDE6D6", navy:"#22345E", sand:"#E3D3B5" };
+  function hash(s){ var h = 2166136261; for (var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rng(seed){ var s = seed || 1; return function(){ s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }; }
+  function archPath(x, w, h, base){ var r = w / 2; return "M" + x + " " + base + " V" + (base - h + r) + " A" + r + " " + r + " 0 0 1 " + (x + w) + " " + (base - h + r) + " V" + base + " Z"; }
+  function Art(p){
+    var r = rng(p.seed), id = "g" + p.seed;
+    var cols = [C.blue, C.verm, C.green, C.ochre].sort(function(){ return r() - .5; });
+    var els = [], k = 0;
+    function add(el){ els.push(el); }
+    var t = p.tpl % 6;
+    if (t === 0) {
+      add(html`<rect key=${k++} width="160" height="100" fill=${cols[0]} />`);
+      var cx = 20 + r() * 50, rr = 42 + r() * 18;
+      add(html`<circle key=${k++} cx=${cx} cy="50" r=${rr} fill=${cols[1]} />`);
+      add(html`<circle key=${k++} cx=${cx} cy="50" r=${rr * .6} fill=${C.cream} />`);
+      add(html`<circle key=${k++} cx=${cx - rr * .5} cy=${10 + r() * 20} r=${14 + r() * 8} fill=${C.ink} />`);
+      add(html`<path key=${k++} d=${"M" + (100 + r() * 30) + " " + (40 + r() * 30) + " a16 16 0 1 0 32 0 a16 16 0 0 0 -16 -16 z"} fill=${cols[3]} />`);
+    } else if (t === 1) {
+      var w = 5 + Math.round(r() * 5);
+      add(html`<defs key=${k++}><pattern id=${id} width=${w * 2} height="100" patternUnits="userSpaceOnUse"><rect width=${w} height="100" fill=${cols[0] === C.ochre ? C.green : cols[0]} /><rect x=${w} width=${w} height="100" fill=${C.cream} /></pattern></defs>`);
+      add(html`<rect key=${k++} width="160" height="100" fill=${"url(#" + id + ")"} />`);
+      var aw = 50 + r() * 34, ax = 80 - aw / 2 + (r() - .5) * 40, ah = aw / 2 + 22 + r() * 18;
+      add(html`<path key=${k++} d=${archPath(ax, aw, ah, 90)} fill=${C.ink} />`);
+      add(html`<rect key=${k++} x=${ax} y="80" width=${aw} height="10" fill=${cols[1]} />`);
+    } else if (t === 2) {
+      add(html`<rect key=${k++} width="160" height="100" fill=${cols[0]} />`);
+      add(html`<polygon key=${k++} points=${r() > .5 ? "0,0 160,0 0,100" : "160,0 160,100 0,100"} fill=${C.cream} />`);
+      add(html`<circle key=${k++} cx=${55 + r() * 50} cy="48" r=${24 + r() * 12} fill=${C.ink} />`);
+      add(html`<rect key=${k++} x=${12 + r() * 20} y=${74 + r() * 8} width=${95 + r() * 30} height="9" fill=${cols[1]} />`);
+      add(html`<circle key=${k++} cx=${130 + r() * 18} cy=${14 + r() * 20} r="7" fill=${cols[2]} />`);
+    } else if (t === 3) {
+      add(html`<defs key=${k++}><pattern id=${id} width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="1.3" fill=${C.ink} /></pattern></defs>`);
+      add(html`<rect key=${k++} width="160" height="100" fill=${cols[0]} />`);
+      add(html`<rect key=${k++} width="160" height="100" fill=${"url(#" + id + ")"} opacity=".75" />`);
+      var qx = r() > .5 ? 160 : 0, qy = r() > .5 ? 100 : 0;
+      add(html`<circle key=${k++} cx=${qx} cy=${qy} r=${48 + r() * 22} fill=${C.cream} />`);
+      add(html`<rect key=${k++} x=${30 + r() * 90} y=${15 + r() * 50} width=${20 + r() * 12} height=${20 + r() * 12} fill=${cols[1]} />`);
+    } else if (t === 4) {
+      var ox = r() > .5 ? 0 : 160, oy = r() > .5 ? 100 : 0, step = 7 + r() * 5;
+      add(html`<rect key=${k++} width="160" height="100" fill=${C.cream} />`);
+      for (var i = 0; i < 26; i++) add(html`<circle key=${k++} cx=${ox} cy=${oy} r=${200 - i * step} fill=${i % 2 ? C.cream : cols[0]} />`);
+      add(html`<circle key=${k++} cx=${40 + r() * 80} cy=${20 + r() * 40} r=${12 + r() * 9} fill=${C.ink} />`);
+    } else {
+      add(html`<defs key=${k++}><linearGradient id=${id} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#EADDC6" /><stop offset="1" stopColor="#D5C19E" /></linearGradient></defs>`);
+      add(html`<rect key=${k++} width="160" height="100" fill=${"url(#" + id + ")"} />`);
+      add(html`<polygon key=${k++} points=${(20 + r() * 40) + ",0 " + (45 + r() * 40) + ",0 " + (10 + r() * 30) + ",100 " + (-15 + r() * 20) + ",100"} fill="#000" opacity=".06" />`);
+      add(html`<polygon key=${k++} points=${(90 + r() * 40) + ",0 " + (115 + r() * 30) + ",0 " + (90 + r() * 20) + ",100 " + (65 + r() * 20) + ",100"} fill="#000" opacity=".06" />`);
+      var fills = [C.navy, "#F0E6D3", C.ochre, C.ink, cols[0]], x = 6 + r() * 8;
+      while (x < 150) {
+        var bw = 12 + r() * 26, bh = 26 + r() * 52, f = fills[Math.floor(r() * fills.length)];
+        add(html`<path key=${k++} d=${archPath(x, bw, Math.max(bh, bw / 2 + 4), 86)} fill=${f} />`);
+        if (bw > 24 && r() > .4) add(html`<path key=${k++} d=${archPath(x + bw * .25, bw * .5, Math.max(bh * .62, bw * .25 + 2), 86)} fill="#D8C6A4" />`);
+        x += bw * (.55 + r() * .6);
+      }
+      add(html`<rect key=${k++} y="86" width="160" height="14" fill="#CDB894" />`);
+    }
+    return html`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" focusable="false">${els}</svg>`;
+  }
+
+  var ITEMS = (data.items || []).map(function(a, i){ return Object.assign({}, a, { _i: i, _seed: hash(a.title || String(i)) }); });
+  function paras(a){ return Array.isArray(a.summary) ? a.summary : (a.summary ? [a.summary] : []); }
+
+  function d(iso){ var p = iso.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+  var MON = ["jan.","febr.","márc.","ápr.","máj.","jún.","júl.","aug.","szept.","okt.","nov.","dec."];
+  function short(iso){ var x = d(iso); return MON[x.getMonth()] + " " + x.getDate() + "."; }
+  function long(iso){ var x = d(iso); return x.getFullYear() + ". " + short(iso); }
+  function cat(c){ return CATS[c] || { color: "var(--ink)", ochre: false }; }
+
+  var upd = new Date(data.updated);
+  var now = new Date();
+  var sameDay = upd.toDateString() === now.toDateString();
+  var part = data.edition === "esti" ? "este" : "reggel";
+  var when = (sameDay ? "ma " : short(data.updated.slice(0,10)) + " ") + part;
+  var hhmm = upd.toLocaleTimeString("hu-HU", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Budapest" });
+  var next = data.edition === "esti" ? "holnap 7:00" : "ma 18:00";
+
+  function num(v, dec){ return Number(v).toLocaleString("hu-HU", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+  function Markets(){
+    var m = data.markets || [];
+    if (!m.length) return null;
+    return html`<section class="markets" aria-label="Piacok">
+      <div class="mk-top"><div class="mk-h">Piacok</div><p class="mk-note">${data.marketsNote || ""}</p></div>
+      <div class="tiles">${m.map(function(t){
+        var c = Number(t.change), cls = c > 0 ? "up" : c < 0 ? "down" : "flat";
+        var arrow = c > 0 ? "▲" : c < 0 ? "▼" : "■";
+        var sign = c > 0 ? "+" : c < 0 ? "−" : "";
+        return html`<div class="tile" key=${t.label}>
+          <div class="n">${t.label}</div>
+          <div class="v">${num(t.value, t.dec == null ? 2 : t.dec)}</div>
+          <div class=${"c " + cls}><span aria-hidden="true">${arrow}</span> ${sign}${num(Math.abs(c), 2)}%</div>
+        </div>`;
+      })}</div>
+    </section>`;
+  }
+  function Elections(){
+    var today = new Date(); today.setHours(0,0,0,0);
+    var list = (data.elections || []).filter(function(x){ return d(x.date) >= today; }).slice(0, 5);
+    if (!list.length) return null;
+    return html`<div class="elx">
+      <h4>Közelgő választások</h4>
+      <ul>${list.map(function(x){
+        var n = Math.round((d(x.date) - today) / 86400000);
+        var cd = n === 0 ? "ma" : n === 1 ? "holnap" : n + " nap múlva";
+        return html`<li key=${x.date + x.country}>
+          <span class="day">${d(x.date).getDate()}<span class="mon">${MON[d(x.date).getMonth()]}</span></span>
+          <span><span class="ct"><a href=${x.url} target="_blank" rel="noopener">${x.country}</a></span><br /><span class="ty">${x.type} · <span class="cd">${cd}</span></span></span>
+        </li>`;
+      })}</ul>
+    </div>`;
+  }
+
+  function Tag(p){
+    var c = cat(p.c);
+    return html`<span class=${"tag" + (c.ochre ? " ochre" : "")} style=${{ background: c.color }}>${p.c}</span>`;
+  }
+  /* Kép: valódi fotó, ha betölthető; ha nem (vagy nincs), a kategória CSS-illusztrációja */
+  function Media(p){
+    var a = p.a;
+    var st = useState(false), failed = st[0], setFailed = st[1];
+    var photo = a.image && !failed;
+    return html`<div class=${"cover" + (p.cls ? " " + p.cls : "")}>
+      <div class="art" aria-hidden="true"><${Art} seed=${a._seed} tpl=${a._v == null ? a._i : a._v} /></div>
+      ${photo && html`<img class="ph" src=${a.image} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onError=${function(){ setFailed(true); }} />`}
+      ${photo && a.credit && !p.noCredit && html`<span class="credit">Kép: ${a.credit}</span>`}
+      ${p.children}
+    </div>`;
+  }
+  /* Forrás logója: a hírportál ikonja (favicon); ha nem tölthető be, monogram a rovat színével */
+  var SOURCE_DOMAINS = [
+    [/reuters/i, "reuters.com"], [/^ap\b|\/ ap\b|associated press/i, "apnews.com"], [/bloomberg/i, "bloomberg.com"],
+    [/al jazeera/i, "aljazeera.com"], [/business wire/i, "businesswire.com"], [/cbs/i, "cbsnews.com"],
+    [/techcrunch/i, "techcrunch.com"], [/the verge/i, "theverge.com"], [/euronews/i, "euronews.com"], [/bbc/i, "bbc.com"],
+    [/politico/i, "politico.eu"], [/portfolio/i, "portfolio.hu"], [/telex/i, "telex.hu"], [/index/i, "index.hu"],
+    [/hvg/i, "hvg.hu"], [/444/i, "444.hu"], [/pénzcentrum|penzcentrum/i, "penzcentrum.hu"], [/magyar nemzet/i, "magyarnemzet.hu"],
+    [/mti/i, "mti.hu"], [/anthropic/i, "anthropic.com"], [/openai/i, "openai.com"], [/mistral/i, "mistral.ai"],
+    [/perplexity/i, "perplexity.ai"], [/nvidia/i, "nvidia.com"], [/google|deepmind/i, "google.com"], [/microsoft/i, "microsoft.com"]
+  ];
+  function logoDomain(a){
+    if (a.logoDomain) return a.logoDomain;
+    var src = a.source || "";
+    var first = src.split("/").map(function(x){ return x.trim(); }).pop();
+    for (var i = 0; i < SOURCE_DOMAINS.length; i++) if (SOURCE_DOMAINS[i][0].test(first)) return SOURCE_DOMAINS[i][1];
+    for (var j = 0; j < SOURCE_DOMAINS.length; j++) if (SOURCE_DOMAINS[j][0].test(src)) return SOURCE_DOMAINS[j][1];
+    try { return new URL(a.url).hostname.replace(/^www\./, ""); } catch (err) { return ""; }
+  }
+  function Avatar(p){
+    var a = p.a, c = cat(a.category);
+    var st = useState(false), bad = st[0], setBad = st[1];
+    var dom = logoDomain(a);
+    if (dom && !bad) return html`<span class=${"av logo" + (p.sm ? " sm" : "")} aria-hidden="true"><img src=${"https://www.google.com/s2/favicons?domain=" + encodeURIComponent(dom) + "&sz=128"} alt="" loading="lazy" referrerpolicy="no-referrer" onError=${function(){ setBad(true); }} onLoad=${function(ev){ if (ev.target.naturalWidth <= 16) setBad(true); }} /></span>`;
+    return html`<span class=${"av" + (c.ochre ? " ochre" : "") + (p.sm ? " sm" : "")} style=${{ background: c.color }} aria-hidden="true">${a.initials}</span>`;
+  }
+  /* Összefoglaló: az első bekezdés látszik, a többi lenyitható */
+  function Summary(p){
+    var ps = paras(p.a), st = useState(false), open = st[0], setOpen = st[1];
+    if (!ps.length) return null;
+    var shown = open ? ps : ps.slice(0, 1);
+    return html`<div class=${p.cls + (open ? " open" : "")}>
+      ${shown.map(function(t, i){ return html`<p key=${i}>${t}</p>`; })}
+      ${ps.length > 1 && html`<button type="button" class="expand" aria-expanded=${open ? "true" : "false"} onClick=${function(ev){ ev.preventDefault(); setOpen(!open); }}>${open ? "Kevesebb" : "Teljes összefoglaló"} <span aria-hidden="true">${open ? "↑" : "↓"}</span></button>`}
+    </div>`;
+  }
+
+  function Title(p){
+    return html`<h3 class="title"><a href=${p.a.url} target="_blank" rel="noopener"><span class="u">${p.a.title}</span></a></h3>`;
+  }
+
+  function Featured(p){
+    var a = p.a;
+    return html`<article class="card feat" style=${{ "--i": 1, gridRow: "span " + p.span }}>
+      <${Media} a=${a}>
+        <div class="badges"><${Tag} c=${a.category} /><span class="glass">Kiemelt</span></div>
+      <//>
+      <div class="body">
+        <div class="meta"><span>${long(a.date)}</span><span class="sep" aria-hidden="true"></span><span>${a.readMin} perc olvasás</span></div>
+        <${Title} a=${a} />
+        <div class="excerpt">${paras(a).map(function(t, i){ return html`<p key=${i}>${t}</p>`; })}</div>
+        <div class="foot">
+          <div class="who"><${Avatar} a=${a} /><div><div class="name">${a.source}</div><div class="role">${a.role}</div></div></div>
+          <span class="btn" aria-hidden="true">Elolvasom <span class="arr">→</span></span>
+        </div>
+      </div>
+    </article>`;
+  }
+  function Small(p){
+    var a = p.a;
+    return html`<article class="card small" style=${{ "--i": p.i }}>
+      <${Media} a=${a} noCredit=${true} />
+      <div class="body">
+        <div class="meta"><${Tag} c=${a.category} /><span>${a.readMin} perc</span></div>
+        <${Title} a=${a} />
+        <${Summary} a=${a} cls="sum" />
+        <div class="who"><${Avatar} a=${a} /><span class="name">${a.source}</span><span class="date" aria-hidden="true">·</span><span class="date">${short(a.date)}</span></div>
+      </div>
+    </article>`;
+  }
+  function Row(p){
+    var a = p.a;
+    return html`<li class="row">
+      <${Media} a=${a} cls="thumb" noCredit=${true} />
+      <div class="rb">
+        <div class="rmeta"><${Tag} c=${a.category} /><span class="rsrc"><${Avatar} a=${a} sm=${true} /><span>${a.source} · ${short(a.date)}</span></span></div>
+        <span class="t"><a href=${a.url} target="_blank" rel="noopener"><span class="u">${a.title}</span></a></span>
+        <${Summary} a=${a} cls="rsum" />
+      </div>
+    </li>`;
+  }
+
+  function App(){
+    var st = useState("Összes"), f = st[0], setF = st[1];
+    var list = (f === "Összes" ? ITEMS : ITEMS.filter(function(a){ return a.category === f; })).map(function(a, i){ return Object.assign({}, a, { _v: i }); });
+    var feat = list[0], smalls = list.slice(1, 4), rest = list.slice(4);
+    var credits = list.filter(function(a){ return a.image && a.credit; });
+    return html`<section class="wrap" aria-labelledby="news-h">
+      <header class="head">
+        <div>
+          <div class="eyebrow">Discord Gang · Hírek</div>
+          <h2 class="h2" id="news-h">Friss hírek <em>${when}</em></h2>
+        </div>
+        <div class="tools">
+          <div class="pills" role="group" aria-label="Kategória szűrő">
+            ${FILTERS.map(function(x){
+              return html`<button key=${x} id=${"f-" + x} type="button" class="pill" aria-pressed=${f === x ? "true" : "false"} onClick=${function(){ setF(x); }}>${x}</button>`;
+            })}
+          </div>
+          <a class="all" href="#tovabbi">További hírek <span aria-hidden="true">↓</span></a>
+        </div>
+      </header>
+
+      ${data._stale && html`<p class="stale" role="status">Az élő adatforrás épp ébred, ez a legutóbbi mentett kiadás. Pár másodperc múlva magától frissül.</p>`}
+      <${Markets} />
+
+      <div class="grid swap" key=${"g-" + f} aria-live="polite">
+        ${feat ? html`<${Featured} a=${feat} span=${Math.max(1, smalls.length)} />` : html`<p class="empty">Ebben a rovatban most nincs friss hír.</p>`}
+        ${smalls.map(function(a, i){ return html`<${Small} key=${a.url + a.title} a=${a} i=${i + 2} />`; })}
+      </div>
+
+      <section class="more" id="tovabbi" aria-labelledby="more-h">
+        <div>
+          <h3 id="more-h">${f === "Összes" ? "További hírek" : "További: " + f}</h3>
+          <p class="stamp">${data.edition === "esti" ? "Esti" : "Reggeli"} kiadás · frissítve ${short(data.updated.slice(0,10))} ${hhmm}<br />Következő frissítés: ${next}</p>
+          <${Elections} />
+        </div>
+        <div class="swap" key=${"l-" + f}>
+          ${rest.length ? html`<ul class="list">${rest.map(function(a){ return html`<${Row} key=${a.url + a.title} a=${a} />`; })}</ul>` : html`<p class="empty">A rovat összes mai híre fent látható.</p>`}
+          <p class="note">A kártyák rövid összefoglalók, a teljes cikk mindig az eredeti forrásnál olvasható.${credits.length ? " Képek: " + credits.map(function(a){ return a.credit; }).filter(function(v, i, arr){ return arr.indexOf(v) === i; }).join(", ") + "." : ""}</p>
+        </div>
+      </section>
+    </section>`;
+  }
+
+  root.render(e(App));
+  }
+
+  /* Adatforrás: a beágyazott JSON azonnal; ha a lap megad egy Supabase forrást (Netlify), onnan a legfrissebb kiadás, újrapróbálással és 10 percenkénti frissítéssel */
+  var inline = JSON.parse(document.getElementById("news-data").textContent);
+  var src = document.querySelector('meta[name="dg-news-source"]');
+  if (!src || !window.fetch) { boot(inline); return; }
+  var shown = null, tries = 0;
+  function show(d, stale){ if (shown && shown.updated === d.updated && !!shown._stale === !!stale) return; shown = Object.assign({}, d, { _stale: !!stale }); boot(shown); }
+  function load(){
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var t = setTimeout(function(){ if (ctrl) ctrl.abort(); }, 9000);
+    return fetch(src.content + "/rest/v1/news_editions?select=data&order=created_at.desc&limit=1", { headers: { apikey: src.getAttribute("data-key") }, cache: "no-store", signal: ctrl ? ctrl.signal : undefined })
+      .then(function(r){ clearTimeout(t); if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(rows){ var d = rows && rows[0] && rows[0].data; if (!d || !d.items) throw new Error("empty"); show(d, false); return true; })
+      .catch(function(){ clearTimeout(t); return false; });
+  }
+  function first(){
+    load().then(function(ok){
+      if (ok) return;
+      tries++;
+      if (tries >= 2 && !shown) show(inline, true);
+      if (tries < 8) setTimeout(first, Math.min(5000 * tries, 20000));
+    });
+  }
+  first();
+  setInterval(function(){ if (!document.hidden) load(); }, 10 * 60 * 1000);
+  document.addEventListener("visibilitychange", function(){ if (!document.hidden) load(); });
+})();
+</script>
+</body></html>
