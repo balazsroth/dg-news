@@ -1028,7 +1028,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
       </header>
 
       ${data._stale && html`<p class="stale" role="status">Az élő adatforrás épp ébred, ez a legutóbbi mentett kiadás. Pár másodperc múlva magától frissül.</p>`}
-      <${MustRead} />
+      ${f === "Összes" && html`<${MustRead} />`}
       <${Markets} />
 
       <div class="grid swap" key=${"g-" + f} aria-live="polite">
