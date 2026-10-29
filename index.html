@@ -67,7 +67,11 @@ body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
 .must-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .must-x{flex:none;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font:600 13px/1 var(--sans);cursor:pointer;transition:border-color .3s var(--ease),color .3s var(--ease)}
 .must-x:hover{border-color:var(--ink);color:var(--ink)}
-.must.out{animation:mustOut .3s var(--ease) forwards}
+.must-wrap{display:grid;grid-template-rows:1fr;margin-top:24px;transition:grid-template-rows .5s var(--ease),margin-top .5s var(--ease)}
+.must-wrap.out{grid-template-rows:0fr;margin-top:0}
+.must-in{min-height:0;overflow:hidden}
+.must-wrap .must{margin-top:0}
+.must-wrap.out .must{animation:mustOut .4s var(--ease) forwards}
 @keyframes mustOut{to{opacity:0;transform:translateY(-10px)}}
 
 /* cikknézet */
@@ -988,8 +992,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
     var list = data.mustRead || [];
     var lv = useState(false), leaving = lv[0], setLeaving = lv[1];
     if (!list.length) return null;
-    function hide(){ setLeaving(true); setTimeout(p.onHide, 300); }
-    return html`<section class=${"must" + (leaving ? " out" : "")} aria-labelledby="must-h">
+    function hide(){ setLeaving(true); setTimeout(p.onHide, 520); }
+    return html`<div class=${"must-wrap" + (leaving ? " out" : "")}><div class="must-in"><section class="must" aria-labelledby="must-h">
       <div class="must-top">
         <h3 class="must-h" id="must-h">Ha csak ezt olvasod el</h3>
         <button type="button" class="must-x" onClick=${hide}>Nem érdekel <span aria-hidden="true">×</span></button>
@@ -1002,7 +1006,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offs
           <span class="must-src">${m.source}${it ? " · kattints a részletekért" : ""}</span>
         </div></li>`;
       })}</ol>
-    </section>`;
+    </section></div></div>`;
   }
 
   function App(){
